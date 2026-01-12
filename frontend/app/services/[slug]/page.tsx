@@ -9,16 +9,22 @@ import { getImageUrl } from '@/lib/imagePlaceholder';
 export const dynamic = 'force-dynamic';
 
 export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  let service = { data: null };
+  let service: { data: any; error?: string; status?: number } = { data: null };
   
   try {
     const { slug } = await params;
-    service = await getServiceBySlug(slug).catch(() => ({ data: null }));
-  } catch (error) {
-    // Handle any errors gracefully
-    service = { data: null };
+    service = await getServiceBySlug(slug);
+  } catch (error: any) {
+    // Unexpected error - throw to error boundary
+    throw new Error(`Failed to load service: ${error.message}`);
   }
 
+  // API error (network, timeout, 500, etc.) - throw to error boundary
+  if (service.error) {
+    throw new Error(`API Error: ${service.error}`);
+  }
+
+  // Data not found (404) - show not found page
   if (!service.data) {
     notFound();
   }

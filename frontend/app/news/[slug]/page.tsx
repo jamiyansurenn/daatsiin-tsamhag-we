@@ -9,16 +9,22 @@ import { getImageUrl } from '@/lib/imagePlaceholder';
 export const dynamic = 'force-dynamic';
 
 export default async function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  let news = { data: null };
+  let news: { data: any; error?: string; status?: number } = { data: null };
   
   try {
     const { slug } = await params;
-    news = await getNewsBySlug(slug).catch(() => ({ data: null }));
-  } catch (error) {
-    // Handle any errors gracefully
-    news = { data: null };
+    news = await getNewsBySlug(slug);
+  } catch (error: any) {
+    // Unexpected error - throw to error boundary
+    throw new Error(`Failed to load news article: ${error.message}`);
   }
 
+  // API error (network, timeout, 500, etc.) - throw to error boundary
+  if (news.error) {
+    throw new Error(`API Error: ${news.error}`);
+  }
+
+  // Data not found (404) - show not found page
   if (!news.data) {
     notFound();
   }
@@ -46,13 +52,15 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
           <div className="container">
             <div style={{ maxWidth: '900px', margin: '0 auto' }}>
               <div style={{ position: 'relative', width: '100%', height: '400px', borderRadius: '8px', marginBottom: '2rem', overflow: 'hidden' }}>
-                <Image
-                  src={getImageUrl(news.data.image, 'news')}
-                  alt={news.data.title}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  sizes="(max-width: 768px) 100vw, 900px"
-                />
+                {news.data?.image && news.data?.title && (
+                  <Image
+                    src={getImageUrl(news.data.image, 'news')}
+                    alt={news.data.title}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    sizes="(max-width: 768px) 100vw, 900px"
+                  />
+                )}
               </div>
               {news.data.excerpt && (
                 <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#666', marginBottom: '2rem', fontStyle: 'italic' }}>

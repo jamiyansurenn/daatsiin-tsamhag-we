@@ -9,16 +9,22 @@ import { getImageUrl } from '@/lib/imagePlaceholder';
 export const dynamic = 'force-dynamic';
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  let project = { data: null };
+  let project: { data: any; error?: string; status?: number } = { data: null };
   
   try {
     const { slug } = await params;
-    project = await getProjectBySlug(slug).catch(() => ({ data: null }));
-  } catch (error) {
-    // Handle any errors gracefully
-    project = { data: null };
+    project = await getProjectBySlug(slug);
+  } catch (error: any) {
+    // Unexpected error - throw to error boundary
+    throw new Error(`Failed to load project: ${error.message}`);
   }
 
+  // API error (network, timeout, 500, etc.) - throw to error boundary
+  if (project.error) {
+    throw new Error(`API Error: ${project.error}`);
+  }
+
+  // Data not found (404) - show not found page
   if (!project.data) {
     notFound();
   }

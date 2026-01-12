@@ -6,6 +6,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getImageUrl } from '@/lib/imagePlaceholder';
 
+// Force dynamic rendering to prevent build-time static generation errors
+export const dynamic = 'force-dynamic';
+
 export default async function NewsPage() {
   const news = await getNews().catch(() => ({ data: [] }));
 

@@ -1,4 +1,4 @@
-# Доод Тсамхаг - Landing Page
+# Даацын Цамхаг - Landing Page
 
 Орчин үеийн, гоё дизайнтай landing page.
 

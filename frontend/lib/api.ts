@@ -2,6 +2,15 @@ import axios from 'axios';
 
 // Get API URL with fallback
 const getApiUrl = () => {
+  // In browser, check for client-side env var first
+  if (typeof window !== 'undefined') {
+    const clientUrl = (window as any).__NEXT_PUBLIC_API_URL__ || process.env.NEXT_PUBLIC_API_URL;
+    if (clientUrl) {
+      return clientUrl.replace(/\/$/, '');
+    }
+  }
+  
+  // Server-side or fallback
   const url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
   // Remove trailing slash if present
   return url.replace(/\/$/, '');

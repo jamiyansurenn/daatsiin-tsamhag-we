@@ -8,9 +8,18 @@ import { getImageUrl } from '@/lib/imagePlaceholder';
 // Force dynamic rendering to prevent build-time static generation errors
 export const dynamic = 'force-dynamic';
 
+interface CompanyInfo {
+  aboutUs?: string | null;
+  vision?: string | null;
+  mission?: string | null;
+  values?: string | null;
+  history?: string | null;
+  [key: string]: any;
+}
+
 export default async function AboutPage() {
-  let companyInfo = { data: null };
-  let teamMembers = { data: [] };
+  let companyInfo: { data: CompanyInfo | null } = { data: null };
+  let teamMembers: { data: any[] } = { data: [] };
 
   try {
     const results = await Promise.allSettled([
@@ -19,10 +28,10 @@ export default async function AboutPage() {
     ]);
 
     if (results[0].status === 'fulfilled') {
-      companyInfo = results[0].value || { data: null };
+      companyInfo = (results[0].value as { data: CompanyInfo | null }) || { data: null };
     }
     if (results[1].status === 'fulfilled') {
-      teamMembers = results[1].value || { data: [] };
+      teamMembers = (results[1].value as { data: any[] }) || { data: [] };
     }
   } catch (error) {
     // Handle errors gracefully - page will render with empty data

@@ -61,7 +61,7 @@ function safeGetData(response: any) {
 // - status: HTTP status code
 export const getCompanyInfo = async () => {
   try {
-    const response = await api.get('/company-info/public');
+    const response: any = await api.get('/company-info/public');
     
     // Check if response has error (from interceptor)
     if (response.error) {
@@ -94,7 +94,7 @@ export const getServices = async () => {
 
 export const getServiceBySlug = async (slug: string) => {
   try {
-    const response = await api.get(`/services/public/${slug}`);
+    const response: any = await api.get(`/services/public/${slug}`);
     
     if (response.error) {
       return { 
@@ -131,7 +131,7 @@ export const getProjects = async (featured?: boolean) => {
 
 export const getProjectBySlug = async (slug: string) => {
   try {
-    const response = await api.get(`/projects/public/${slug}`);
+    const response: any = await api.get(`/projects/public/${slug}`);
     
     if (response.error) {
       return { 
@@ -168,7 +168,7 @@ export const getNews = async (featured?: boolean, limit?: number) => {
 
 export const getNewsBySlug = async (slug: string) => {
   try {
-    const response = await api.get(`/news/public/${slug}`);
+    const response: any = await api.get(`/news/public/${slug}`);
     
     // Check if response has error (from interceptor)
     if (response.error) {

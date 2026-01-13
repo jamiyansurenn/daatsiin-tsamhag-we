@@ -24,5 +24,5 @@ RUN npx prisma generate
 # Build the application
 RUN npm run build
 
-# Start the application
-CMD ["npm", "run", "start:prod"]
+# Start the application (use node directly instead of npm)
+CMD ["node", "dist/main.js"]

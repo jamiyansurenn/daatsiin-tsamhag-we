@@ -64,8 +64,8 @@ Full Stack Corporate Website with Admin Panel, Multi-language Support, and Conte
 
 ### 1. Clone Repository
 ```bash
-git clone <your-repo-url>
-cd "copy mon"
+git clone https://github.com/jamiyansurenn/daatsiin-tsamhag-we.git
+cd daatsiin-tsamhag-we
 ```
 
 ### 2. Backend Setup
